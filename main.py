@@ -1,3 +1,4 @@
+import itertools
 import numpy
 from sys import argv
 
@@ -58,4 +59,35 @@ def printEffectivenessFromConsoleInput():
           ", ".join(notSuperEffective))
 
 
+def findMostEffectiveTeams(minimumCouters=N):
+    typeSet = set(TYPES)
+    subsets = list(itertools.combinations(typeSet, 6))
+
+    answers = dict()
+
+    for subset in subsets:
+        group = []
+        for type in subset:
+            indexOfType = TYPES.index(type)
+            for opponentIndex in range(N):
+                attackMultiplier = TABLE[indexOfType][opponentIndex]
+                if attackMultiplier == 2:
+                    group.append(TYPES[opponentIndex])
+
+        if len(group) >= minimumCouters:
+            answers[subset] = group
+
+        # print("Team of: \n", subset)
+        # print("Is super effective against: \n", group)
+    for answer in answers:
+        print(f"Team of types: {', '.join(answer)}")
+        if minimumCouters == N:
+            print("Is super effective against ALL other types")
+        else:
+            print(
+                f"Is super effective against types: {', '.join(answers[answer])}")
+        print("----------------------------------------")
+
+
 printEffectivenessFromConsoleInput()
+findMostEffectiveTeams()
