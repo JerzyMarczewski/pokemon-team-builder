@@ -59,9 +59,11 @@ def printEffectivenessFromConsoleInput():
           ", ".join(notSuperEffective))
 
 
-def findMostEffectiveTeams(minimumCouters=N):
-    typeSet = set(TYPES)
-    subsets = list(itertools.combinations(typeSet, 6))
+def findMostEffectiveTeams(minimumCouters=N, excludedAllies=(), excludedEnemies=()):
+    allySet = set(TYPES) - set(excludedAllies)
+    enemySet = set(TYPES) - set(excludedEnemies)
+
+    subsets = list(itertools.combinations(allySet, 6))
 
     answers = dict()
 
@@ -71,7 +73,7 @@ def findMostEffectiveTeams(minimumCouters=N):
             indexOfType = TYPES.index(type)
             for opponentIndex in range(N):
                 attackMultiplier = TABLE[indexOfType][opponentIndex]
-                if attackMultiplier == 2:
+                if attackMultiplier == 2 and TYPES[opponentIndex] in enemySet:
                     group.add(TYPES[opponentIndex])
 
         if len(group) >= minimumCouters:
@@ -87,10 +89,16 @@ def findMostEffectiveTeams(minimumCouters=N):
         #         f"Is super effective against types: {', '.join(answers[answer])}")
         # print("----------------------------------------")
 
-        file.write(', '.join(answer)+"\n")
+        file.write(' '.join(answer)+"\n")
 
     file.close()
 
 
 printEffectivenessFromConsoleInput()
-findMostEffectiveTeams()
+
+excludedAllies = ("fairy", "normal", "ice",
+                  "fighting", "electric", "dark", "ghost", "dragon")
+excludedEnemies = ("fairy", "normal", "dragon", "ghost", "dark")
+
+findMostEffectiveTeams(N - len(excludedEnemies),
+                       excludedAllies, excludedEnemies)
