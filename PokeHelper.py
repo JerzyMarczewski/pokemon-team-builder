@@ -45,3 +45,16 @@ class PokeHelper(object):
                     result.add(TYPES[col])
 
         return result
+
+    def getPokemonWeaknesses(self, name):
+        if name.lower() not in self.pokemonInfo.keys():
+            raise ValueError
+
+        result = set()
+        for type in self.pokemonInfo[name.lower()]:
+            typeId = TYPES.index(type)
+            for col, attackMul in enumerate(TABLE[typeId]):
+                if attackMul == 0.5 or attackMul == 0:
+                    result.add(TYPES[col])
+
+        return result
