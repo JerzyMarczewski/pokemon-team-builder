@@ -76,7 +76,7 @@ def findMostEffectiveTeams(minimumCouters=N, excludedAllies=(), excludedEnemies=
                 if attackMultiplier == 2 and TYPES[opponentIndex] in enemySet:
                     group.add(TYPES[opponentIndex])
 
-        if len(group) >= minimumCouters:
+        if group == enemySet:
             answers[subset] = group
 
     file = open("results.txt", "w")
@@ -97,8 +97,8 @@ def findMostEffectiveTeams(minimumCouters=N, excludedAllies=(), excludedEnemies=
 printEffectivenessFromConsoleInput()
 
 excludedAllies = ("fairy", "normal", "ice",
-                  "fighting", "electric", "dark", "ghost", "dragon")
-excludedEnemies = ("fairy", "normal", "dragon", "ghost", "dark")
+                  "electric", "dark", "ghost", "dragon")
+excludedEnemies = ("fairy", "ice", "dark", "ghost", "dragon")
 
 findMostEffectiveTeams(N - len(excludedEnemies),
                        excludedAllies, excludedEnemies)
