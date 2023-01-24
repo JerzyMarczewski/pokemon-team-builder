@@ -17,9 +17,9 @@ class PokeHelper(object):
                 type1ColId = header.index("type1")
                 type2ColId = header.index("type2")
 
-                pokemonName = row[nameColId]
-                pokemonInfo[pokemonName] = [row[type1ColId], row[type2ColId]
-                                            ] if row[type2ColId] else [row[type1ColId]]
+                pokemonName = row[nameColId].lower()
+                self.pokemonInfo[pokemonName] = [row[type1ColId], row[type2ColId]
+                                                 ] if row[type2ColId] else [row[type1ColId]]
 
             file.close()
         except:
@@ -27,8 +27,7 @@ class PokeHelper(object):
             sys.exit()
 
     def getPokemonTypes(self, name):
-        if self.pokemonInfo[name] == None:
-            print(f"Error!!! There is no pokemon with the name of {name}")
-            return
+        if name.lower() not in self.pokemonInfo.keys():
+            raise ValueError
 
-        return self.pokemonInfo[name]
+        return self.pokemonInfo[name.lower()]
