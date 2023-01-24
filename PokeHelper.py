@@ -58,3 +58,17 @@ class PokeHelper(object):
                     result.add(TYPES[col])
 
         return result
+
+    def getPokemonVulnerabilities(self, name):
+        if name.lower() not in self.pokemonInfo.keys():
+            raise ValueError
+
+        result = set()
+        for type in self.pokemonInfo[name.lower()]:
+            typeId = TYPES.index(type)
+            for rowId in range(len(TABLE)):
+                attackMul = TABLE[rowId][typeId]
+                if attackMul == 2:
+                    result.add(TYPES[rowId])
+
+        return result
