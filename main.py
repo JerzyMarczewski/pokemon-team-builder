@@ -147,5 +147,15 @@ def main():
         else:
             print(f"{name} is not effective types of: {', '.join(types)}")
 
+    elif argv[1].lower() == "gpv":
+        name = argv[2]
+        try:
+            types = helper.getPokemonVulnerabilities(name)
+        except:
+            print(f"Error!!! There is no pokemon with the name of {name}")
+        else:
+            print(
+                f"{name} is vulnerable against pokemon with types of: {', '.join(types)}")
+
 
 main()
