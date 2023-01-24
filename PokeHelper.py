@@ -1,5 +1,6 @@
 import csv
 import sys
+from typesTable import TYPES, TABLE
 
 
 class PokeHelper(object):
@@ -31,3 +32,16 @@ class PokeHelper(object):
             raise ValueError
 
         return self.pokemonInfo[name.lower()]
+
+    def getPokemonStrengths(self, name):
+        if name.lower() not in self.pokemonInfo.keys():
+            raise ValueError
+
+        result = set()
+        for type in self.pokemonInfo[name.lower()]:
+            typeId = TYPES.index(type)
+            for col, attackMul in enumerate(TABLE[typeId]):
+                if attackMul == 2:
+                    result.add(TYPES[col])
+
+        return result
