@@ -94,11 +94,25 @@ def findMostEffectiveTeams(minimumCouters=N, excludedAllies=(), excludedEnemies=
     file.close()
 
 
-printEffectivenessFromConsoleInput()
+def whatTypesAreEffectiveAgainst(enemyType):
+    enemyTypeIndex = TYPES.index(enemyType)
+    resultSet = set()
 
-excludedAllies = ("fairy", "normal", "ice",
-                  "electric", "dark", "ghost", "dragon")
-excludedEnemies = ("fairy", "ice", "dark", "ghost", "dragon")
+    for i in range(N):
+        attackMultiplier = TABLE[i][enemyTypeIndex]
+        if (attackMultiplier == 2):
+            resultSet.add(TYPES[i])
 
-findMostEffectiveTeams(N - len(excludedEnemies),
-                       excludedAllies, excludedEnemies)
+    print(" ".join(resultSet))
+
+
+# printEffectivenessFromConsoleInput()
+
+# excludedAllies = ("fairy", "normal", "ice",
+#                   "electric", "dark", "ghost", "dragon")
+# excludedEnemies = ("fairy", "ice", "dark", "ghost", "dragon")
+
+# findMostEffectiveTeams(N - len(excludedEnemies),
+#                        excludedAllies, excludedEnemies)
+
+whatTypesAreEffectiveAgainst("grass")
