@@ -1,0 +1,10 @@
+ice, dark, electric, fighting, ground, flying
+ice, dark, steel, fighting, ground, flying
+ice, dark, grass, fighting, ground, flying
+ice, dark, fighting, poison, ground, flying
+ice, electric, ghost, fighting, ground, flying
+ice, steel, ghost, fighting, ground, flying
+ice, ghost, grass, fighting, ground, flying
+ice, ghost, fighting, poison, ground, flying
+dark, grass, poison, ground, rock, fairy
+ghost, grass, poison, ground, rock, fairy
