@@ -129,5 +129,14 @@ def main():
         else:
             print(f"{name} has types of: {types}")
 
+    elif argv[1].lower() == "gps":
+        name = argv[2]
+        try:
+            types = helper.getPokemonStrengths(name)
+        except:
+            print(f"Error!!! There is no pokemon with the name of {name}")
+        else:
+            print(f"{name} is super effective against types of: {', '.join(types)}")
+
 
 main()
