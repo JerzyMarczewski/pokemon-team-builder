@@ -138,5 +138,14 @@ def main():
         else:
             print(f"{name} is super effective against types of: {', '.join(types)}")
 
+    elif argv[1].lower() == "gpw":
+        name = argv[2]
+        try:
+            types = helper.getPokemonWeaknesses(name)
+        except:
+            print(f"Error!!! There is no pokemon with the name of {name}")
+        else:
+            print(f"{name} is not effective types of: {', '.join(types)}")
+
 
 main()
