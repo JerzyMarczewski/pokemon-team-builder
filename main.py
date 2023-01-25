@@ -2,7 +2,7 @@ import csv
 import itertools
 import numpy
 from sys import argv
-
+from Errors import BadTypeNameError, NotEnoughtArgumentsError, BadPokemonNameError
 
 # def printTable():
 #     for i in range(N):
@@ -160,6 +160,35 @@ def main():
     elif argv[1].lower() == "st":
         values = argv[2:]
         helper.setTeam(values)
+
+    elif argv[1].lower() == "gam":
+        try:
+            if len(argv) < 4:
+                raise NotEnoughtArgumentsError("gam")
+
+            attackType, enemyPokemon = argv[2], argv[3]
+            mul = helper.getAttackMultiplier(attackType, enemyPokemon)
+        except NotEnoughtArgumentsError as err:
+            print(f"Error!!! Not enought arguments for command: {err.command}")
+        except BadTypeNameError as err:
+            print(f"Error!!! There is no type of: {err.type}")
+        except BadPokemonNameError as err:
+            print(
+                f"Error!!! there is no pokemon with the name of {err.name}")
+        else:
+            print(mul)
+
+    elif argv[1].lower() == "gaam":
+
+        try:
+            enemyPokemon = argv[2]
+            mulDict = helper.getAllAttacksMultipliers(enemyPokemon)
+        except BadPokemonNameError as err:
+            print(
+                f"Error!!! there is no pokemon with the name of {err.name}")
+        else:
+            for type in mulDict:
+                print(f"{type}: {mulDict[type]}")
 
 
 main()
