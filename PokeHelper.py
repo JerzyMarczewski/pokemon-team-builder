@@ -12,6 +12,7 @@ class PokeHelper(object):
             header = []
             header = next(csvreader)
 
+            self.team = []
             self.pokemonInfo = dict()
             for row in csvreader:
                 nameColId = header.index("name")
@@ -26,6 +27,26 @@ class PokeHelper(object):
         except:
             print("ERROR!!!")
             sys.exit()
+
+    def setTeam(self, names):
+        if len(names) == 0:
+            return
+
+        if len(names) > 6:
+            print("Error!!! You can only have 6 pokemon on your team")
+            return
+
+        try:
+            loweredNames = [value.lower() for value in names]
+            for name in loweredNames:
+                if name not in self.pokemonInfo.keys():
+                    raise ValueError
+                elif name not in self.team:
+                    self.team.append(name)
+        except:
+            print("Error!!! All arguments must be viable pokemon names")
+        else:
+            print(self.team)
 
     def getPokemonTypes(self, name):
         if name.lower() not in self.pokemonInfo.keys():
