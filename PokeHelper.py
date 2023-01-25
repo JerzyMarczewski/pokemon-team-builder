@@ -64,11 +64,27 @@ class PokeHelper(object):
             raise ValueError
 
         result = set()
-        for type in self.pokemonInfo[name.lower()]:
-            typeId = TYPES.index(type)
+        types = self.pokemonInfo[name.lower()]
+        if len(types) == 1:
+            typeId = TYPES.index(types[0])
             for rowId in range(len(TABLE)):
                 attackMul = TABLE[rowId][typeId]
                 if attackMul == 2:
                     result.add(TYPES[rowId])
+
+        elif len(types) == 2:
+            mulByType = dict()
+            type1Id = TYPES.index(types[0])
+            type2Id = TYPES.index(types[1])
+
+            for rowId in range(len(TABLE)):
+                attackMul = TABLE[rowId][type1Id] * TABLE[rowId][type2Id]
+                if attackMul >= 2:
+                    result.add(TYPES[rowId])
+                    mulByType[TYPES[rowId]] = attackMul
+
+            sortedResult = sorted(mulByType.items(),
+                                  key=lambda item: item[1], reverse=True)
+            print(sortedResult)
 
         return result
