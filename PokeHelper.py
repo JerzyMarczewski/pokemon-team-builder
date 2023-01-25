@@ -1,6 +1,7 @@
 import csv
 import sys
 from typesTable import TYPES, TABLE
+from Errors import BadTypeNameError, BadPokemonNameError
 
 
 class PokeHelper(object):
@@ -109,3 +110,21 @@ class PokeHelper(object):
             print(sortedResult)
 
         return result
+
+    def getAttackMultiplier(self, attackType, enemyPokemonName):
+        if attackType not in TYPES:
+            raise BadTypeNameError(attackType)
+
+        loweredName = enemyPokemonName.lower()
+        if loweredName not in self.pokemonInfo.keys():
+            raise BadPokemonNameError(loweredName)
+
+        attackTypeId = TYPES.index(attackType)
+        mul = 1
+
+        enemyTypes = self.pokemonInfo[loweredName]
+        for enemyType in enemyTypes:
+            enemyTypeId = TYPES.index(enemyType)
+            mul *= TABLE[attackTypeId][enemyTypeId]
+
+        return mul
