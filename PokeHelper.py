@@ -128,3 +128,23 @@ class PokeHelper(object):
             mul *= TABLE[attackTypeId][enemyTypeId]
 
         return mul
+
+    def getAllAttacksMultipliers(self, enemyPokemonName):
+        loweredName = enemyPokemonName.lower()
+        if loweredName not in self.pokemonInfo.keys():
+            raise BadPokemonNameError(loweredName)
+
+        mulDict = dict()
+        enemyTypes = self.pokemonInfo[loweredName]
+
+        for attackTypeId, attackType in enumerate(TYPES):
+            mul = 1
+            for enemyType in enemyTypes:
+                enemyTypeId = TYPES.index(enemyType)
+                mul *= TABLE[attackTypeId][enemyTypeId]
+
+            mulDict[attackType] = mul
+
+        sortedMulDict = dict(
+            sorted(mulDict.items(), key=lambda item: item[1], reverse=True))
+        return sortedMulDict
