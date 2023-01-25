@@ -157,5 +157,9 @@ def main():
             print(
                 f"{name} is vulnerable against pokemon with types of: {', '.join(types)}")
 
+    elif argv[1].lower() == "st":
+        values = argv[2:]
+        helper.setTeam(values)
+
 
 main()
