@@ -6,6 +6,9 @@ from Errors import BadTypeNameError, BadPokemonNameError
 
 class PokeHelper(object):
     def __init__(self):
+        self.team = []
+        self.pokemonInfo = dict()
+
         try:
             file = open("pokemon.csv", encoding="utf8")
 
@@ -13,8 +16,6 @@ class PokeHelper(object):
             header = []
             header = next(csvreader)
 
-            self.team = []
-            self.pokemonInfo = dict()
             for row in csvreader:
                 nameColId = header.index("name")
                 type1ColId = header.index("type1")
@@ -26,8 +27,19 @@ class PokeHelper(object):
 
             file.close()
         except:
-            print("ERROR!!!")
+            print("ERROR!!! Couldn't read information from pokemon.csv")
             sys.exit()
+
+        try:
+            teamFile = open("team.txt", "r")
+            text = teamFile.readline()
+            self.setTeam(text.split())
+            teamFile.close()
+        except:
+            print("ERROR!!! Couldn't read information from team.txt")
+            sys.exit()
+        else:
+            print("loaded team:", self.team)
 
     def setTeam(self, names):
         if len(names) == 0:
@@ -40,11 +52,14 @@ class PokeHelper(object):
         try:
             loweredNames = [value.lower() for value in names]
             for name in loweredNames:
-                if name not in self.pokemonInfo.keys():
-                    raise ValueError
+                if name.lower() not in self.pokemonInfo.keys():
+                    raise BadPokemonNameError(name.lower())
                 elif name not in self.team:
                     self.team.append(name)
-        except:
+
+            with open("team.txt", "w") as file:
+                file.write(" ".join(self.team))
+        except BadPokemonNameError:
             print("Error!!! All arguments must be viable pokemon names")
         else:
             print(f"Team set to: {', '.join(self.team)}")
