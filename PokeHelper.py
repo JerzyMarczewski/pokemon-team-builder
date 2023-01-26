@@ -47,10 +47,11 @@ class PokeHelper(object):
         except:
             print("Error!!! All arguments must be viable pokemon names")
         else:
-            print(self.team)
+            print(f"Team set to: {', '.join(self.team)}")
 
     def findMostEffectiveTeamMember(self, enemyPokemon):
         if len(self.team) == 0:
+            print("Warning!!! You have no pokemon in your team")
             return None
 
         mulsAgainstEnemy = self.getAllAttacksMultipliers(enemyPokemon)
