@@ -190,5 +190,12 @@ def main():
             for type in mulDict:
                 print(f"{type}: {mulDict[type]}")
 
+    elif argv[1].lower() == "fmetm":
+        try:
+            helper.findMostEffectiveTeamMember(argv[2])
+        except BadPokemonNameError as err:
+            print(
+                f"Error!!! there is no pokemon with the name of {err.name}")
+
 
 main()
