@@ -33,15 +33,13 @@ class PokeHelper(object):
         try:
             teamFile = open("team.txt", "r")
             text = teamFile.readline()
-            self.setTeam(text.split())
+            self.setTeam(text.split(), True)
             teamFile.close()
         except:
             print("ERROR!!! Couldn't read information from team.txt")
             sys.exit()
-        else:
-            print("loaded team:", self.team)
 
-    def setTeam(self, names):
+    def setTeam(self, names, load=False):
         if len(names) == 0:
             return
 
@@ -49,20 +47,26 @@ class PokeHelper(object):
             print("Error!!! You can only have 6 pokemon on your team")
             return
 
+        temp = []
+
         try:
             loweredNames = [value.lower() for value in names]
             for name in loweredNames:
                 if name.lower() not in self.pokemonInfo.keys():
                     raise BadPokemonNameError(name.lower())
-                elif name not in self.team:
-                    self.team.append(name)
+                elif name not in temp:
+                    temp.append(name)
 
+            self.team = temp
             with open("team.txt", "w") as file:
                 file.write(" ".join(self.team))
         except BadPokemonNameError:
             print("Error!!! All arguments must be viable pokemon names")
         else:
-            print(f"Team set to: {', '.join(self.team)}")
+            if load:
+                print(f"Loaded team: {', '.join(self.team)}")
+            else:
+                print(f"Team set to: {', '.join(self.team)}")
 
     def findMostEffectiveTeamMember(self, enemyPokemon):
         if len(self.team) == 0:
@@ -71,9 +75,45 @@ class PokeHelper(object):
 
         mulsAgainstEnemy = self.getAllAttacksMultipliers(enemyPokemon)
 
+        statsDict = dict()
+
         for member in self.team:
-            for attackType in self.getPokemonTypes(member):
-                print(member, attackType)
+            allyAttackTypes = self.getPokemonTypes(member)
+            enemyAttackTypes = self.getPokemonTypes(enemyPokemon)
+
+            if len(allyAttackTypes) == 2:
+                allyMul1 = mulsAgainstEnemy[allyAttackTypes[0]]
+                allyMul2 = mulsAgainstEnemy[allyAttackTypes[1]]
+                if max(allyMul1, allyMul2) == allyMul1:
+                    maxAllyMul = allyMul1
+                    allyBestAttackType = allyAttackTypes[0]
+                else:
+                    maxAllyMul = allyMul2
+                    allyBestAttackType = allyAttackTypes[1]
+            else:
+                maxAllyMul = mulsAgainstEnemy[allyAttackTypes[0]]
+                allyBestAttackType = allyAttackTypes[0]
+
+            if len(enemyAttackTypes) == 2:
+                enemyMul1 = self.getAttackMultiplier(
+                    enemyAttackTypes[0], member)
+                enemyMul2 = self.getAttackMultiplier(
+                    enemyAttackTypes[1], member)
+                maxEnemyMul = max(enemyMul1, enemyMul2)
+            else:
+                maxEnemyMul = self.getAttackMultiplier(
+                    enemyAttackTypes[0], member)
+
+            ratio = maxAllyMul / \
+                maxEnemyMul if maxEnemyMul != 0 else float('inf')
+            # print(
+            #     f"{member} - {allyBestAttackType} | {maxAllyMul} | {maxEnemyMul} | ratio: {maxAllyMul/maxEnemyMul}")
+            statsDict[member] = [allyBestAttackType, ratio]
+
+        sortedDict = sorted(statsDict.items(),
+                            key=lambda item: item[1][1], reverse=True)
+        # for stat in statsDict:
+        print(sortedDict)
 
     def getPokemonTypes(self, name):
         if name.lower() not in self.pokemonInfo.keys():
