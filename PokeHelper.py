@@ -49,15 +49,25 @@ class PokeHelper(object):
         else:
             print(self.team)
 
+    def findMostEffectiveTeamMember(self, enemyPokemon):
+        if len(self.team) == 0:
+            return None
+
+        mulsAgainstEnemy = self.getAllAttacksMultipliers(enemyPokemon)
+
+        for member in self.team:
+            for attackType in self.getPokemonTypes(member):
+                print(member, attackType)
+
     def getPokemonTypes(self, name):
         if name.lower() not in self.pokemonInfo.keys():
-            raise ValueError
+            raise BadPokemonNameError(name.lower())
 
         return self.pokemonInfo[name.lower()]
 
     def getPokemonStrengths(self, name):
         if name.lower() not in self.pokemonInfo.keys():
-            raise ValueError
+            raise BadPokemonNameError(name.lower())
 
         result = set()
         for type in self.pokemonInfo[name.lower()]:
@@ -70,7 +80,7 @@ class PokeHelper(object):
 
     def getPokemonWeaknesses(self, name):
         if name.lower() not in self.pokemonInfo.keys():
-            raise ValueError
+            raise BadPokemonNameError(name.lower())
 
         result = set()
         for type in self.pokemonInfo[name.lower()]:
@@ -83,7 +93,7 @@ class PokeHelper(object):
 
     def getPokemonVulnerabilities(self, name):
         if name.lower() not in self.pokemonInfo.keys():
-            raise ValueError
+            raise BadPokemonNameError(name.lower())
 
         result = set()
         types = self.pokemonInfo[name.lower()]
